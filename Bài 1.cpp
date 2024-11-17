@@ -1,9 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
 
 // Định nghĩa cấu trúc `Node`
 struct Node {
-    int value;       // Đổi tên `data` thành `value`
+    int value;
     struct Node *next;
 };
 
@@ -19,8 +20,8 @@ struct Node* createNode(int val) {
 // Hàm in danh sách liên kết
 void printList(struct Node *head) {
     struct Node *current = head;
-    printf("\nDanh sách: ");
-    while(current != NULL) {
+    printf(u8"\nDanh sách: ");
+    while (current != NULL) {
         printf("%d ", current->value);
         current = current->next;
     }
@@ -28,8 +29,8 @@ void printList(struct Node *head) {
 
 // Hàm xóa đầu danh sách
 struct Node* deleteHead(struct Node *head) {
-    if(head == NULL) {
-        printf("\nDanh sách rỗng!");
+    if (head == NULL) {
+        printf(u8"\nDanh sách rỗng!");
         return NULL;
     }
     struct Node *temp = head;
@@ -40,17 +41,18 @@ struct Node* deleteHead(struct Node *head) {
 
 // Hàm xóa cuối danh sách
 struct Node* deleteTail(struct Node *head) {
-    if(head == NULL) {
-        printf("\nDanh sách rỗng!");
+    if (head == NULL) {
+        printf(u8"\nDanh sách rỗng!");
         return NULL;
     }
-    if(head->next == NULL) {
+    if (head->next == NULL) {
         free(head);
         return NULL;
     }
     struct Node *current = head;
-    while(current->next->next != NULL) {
-        current = current->next;}
+    while (current->next->next != NULL) {
+        current = current->next;
+    }
     free(current->next);
     current->next = NULL;
     return head;
@@ -58,22 +60,22 @@ struct Node* deleteTail(struct Node *head) {
 
 // Xóa phần tử đứng sau một giá trị XX
 struct Node* deleteAfterValue(struct Node *head, int val) {
-    if(head == NULL) {
-        printf("\nDanh sách rỗng!");
+    if (head == NULL) {
+        printf(u8"\nDanh sách rỗng!");
         return NULL;
     }
     struct Node *current = head;
-    while(current != NULL && current->value != val) {
+    while (current != NULL && current->value != val) {
         current = current->next;
-    }if(current == NULL) {
-        printf("\nKhông tìm thấy giá trị %d trong danh sách!", val);
+    }
+    if (current == NULL) {
+        printf(u8"\nKhông tìm thấy giá trị %d trong danh sách!", val);
         return head;
     }
-    if(current->next == NULL) {
-        printf("\nKhông có phần tử sau giá trị %d để xóa!", val);
+    if (current->next == NULL) {
+        printf(u8"\nKhông có phần tử sau giá trị %d để xóa!", val);
         return head;
-    }
-    struct Node *temp = current->next;
+    }struct Node *temp = current->next;
     current->next = temp->next;
     free(temp);
     return head;
@@ -81,6 +83,7 @@ struct Node* deleteAfterValue(struct Node *head, int val) {
 
 // Chương trình
 int main() {
+    SetConsoleOutputCP(CP_UTF8); // Đặt mã hóa UTF-8 cho console
     struct Node *head = NULL;
     // Tạo danh sách mẫu
     head = createNode(10);
@@ -88,14 +91,17 @@ int main() {
     head->next->next = createNode(30);
     head->next->next->next = createNode(40);
     head->next->next->next->next = createNode(50);
-    printf("\nDanh sách ban đầu:");
+    printf(u8"\nDanh sách ban đầu:");
     printList(head);
-    printf("\n\nXóa đầu:"); // Thực hiện xóa phần tử đầu tiên từ danh sách ban đầu
-    printList(deleteHead(head));
-    printf("\n\nXóa cuối:"); // Thực hiện xóa phần tử cuối cùng từ danh sách ban đầu
-    printList(deleteTail(head));
-    printf("\n\nXóa phần tử sau giá trị 20:"); // Thực hiện xóa phần tử sau giá trị 20
-    printList(deleteAfterValue(head, 20));
-    printf("\n");
+    printf(u8"\n\nXóa đầu:");
+    head = deleteHead(head); // Cập nhật head sau khi xóa đầu
+    printList(head);
+    printf(u8"\n\nXóa cuối:");
+    head = deleteTail(head); // Cập nhật head sau khi xóa cuối
+    printList(head);
+    printf(u8"\n\nXóa phần tử sau giá trị 20:");
+    head = deleteAfterValue(head, 20); // Cập nhật head sau khi xóa phần tử
+    printList(head);
+    printf(u8"\n");
     return 0;
 }
